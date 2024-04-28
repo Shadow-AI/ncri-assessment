@@ -5,13 +5,13 @@ import '../css/App.css';
 
 import {useEffect, useState} from "react";
 import {
-    faBars,
-    faSearch,
+    faBars, faCloudRain, faDroplet, faEye,
+    faSearch, faSun,
     faTemperature0,
     faTemperature1,
     faTemperature2,
     faTemperature3,
-    faTemperature4
+    faTemperature4, faTemperatureHigh, faWind
 } from "@fortawesome/free-solid-svg-icons";
 import Card from "./Card.jsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -43,7 +43,7 @@ function App() {
             <div className="container-fluid">
                 <div className={"row position-relative"}>
                     <div className={"col-12 col-md-7"}>
-                        <CurrentPanel/>
+                        <CentralPanel/>
                     </div>
                     <div className={"col"}>
                         {currentLocation.latitude}, {currentLocation.longitude}
@@ -80,7 +80,7 @@ const ForecastPanel = () => {
     </>);
 }
 
-const CurrentPanel = () => {
+const CentralPanel = () => {
 
     const temperatureIcon = (temp) => {
         if (temp >= 35) {
@@ -148,13 +148,41 @@ const CurrentPanel = () => {
                     <h1 className={"mx-2"}>12&deg;C</h1>
                 </div>
             </div>
+
             <hr/>
+
             <div className={"row"}>
                 <div className={"city-weather"}>
                     Clear Sky
                     Precipitation
                     Humidity
                     Wind
+                    <div className={"container d-flex flex-column"}>
+                        <div className={"row mx-auto my-4"}>
+                            <div className={"col-12 col-md-6"}>
+                                <Card imageLeft={true} icon={faWind}/>
+                            </div>
+                            <div className={"col-12 col-md-6"}>
+                                <Card imageLeft={true} icon={faTemperatureHigh}/>
+                            </div>
+                        </div>
+                        <div className={"row mx-auto my-4"}>
+                            <div className={"col-12 col-md-6"}>
+                                <Card imageLeft={true} icon={faCloudRain}/>
+                            </div>
+                            <div className={"col-12 col-md-6"}>
+                                <Card imageLeft={true} icon={faDroplet}/>
+                            </div>
+                        </div>
+                        <div className={"row mx-auto my-4"}>
+                            <div className={"col-12 col-md-6"}>
+                                <Card imageLeft={true} icon={faEye}/>
+                            </div>
+                            <div className={"col-12 col-md-6"}>
+                                <Card imageLeft={true} icon={faSun}/>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
