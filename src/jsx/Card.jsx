@@ -1,7 +1,14 @@
 import PropTypes from "prop-types";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
-const Card = ({className, imageLeft = false, icon}) => {
+const Card = ({
+                  className,
+                  imageLeft = false,
+                  icon,
+                  cardTitle = "",
+                  cardBody = "",
+                  cardSecondary = ""
+              }) => {
     return (
         <div className={`card d-inline-block mx-auto ${className}`}>
             <div className={"row"}>
@@ -13,8 +20,9 @@ const Card = ({className, imageLeft = false, icon}) => {
                     }
                 </div>
                 <div className={"col"}>
-                    <h2>Card Title</h2>
-                    <p>Card Description</p>
+                    <h2>{cardTitle}</h2>
+                    <p>{cardBody}</p>
+                    <p>{cardSecondary}</p>
                 </div>
             </div>
         </div>
@@ -23,7 +31,10 @@ const Card = ({className, imageLeft = false, icon}) => {
 Card.propTypes = {
     className: PropTypes.string,
     imageLeft: PropTypes.bool,
-    icon: PropTypes.object
+    icon: PropTypes.object,
+    cardTitle: PropTypes.string,
+    cardBody: PropTypes.string,
+    cardSecondary: PropTypes.string
 };
 
 export default Card;
