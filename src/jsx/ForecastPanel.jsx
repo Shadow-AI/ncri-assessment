@@ -1,17 +1,24 @@
-import Card from "./Card.jsx";
-import {faCloudRain} from "@fortawesome/free-solid-svg-icons";
+import {Card} from "./Cards.jsx";
 import PropTypes from "prop-types";
+import "../css/ForecastPanel.css";
 
+/**
+ * ForecastPanel component that displays a 5-day weather forecast.
+ * @param {array} weatherItem5Day - An array of weather items for the 5-day forecast.
+ */
 const ForecastPanel = ({weatherItem5Day}) => {
     return (<>
         <div className={"container w-100 mt-5"}>
-            {/*for medium and above, where the column is split, position vertically, and keep them small, on hover/click zoom it up and show, and unblur*/}
-            <div className={"row flex-row flex-nowrap flex-md-column flex-md-wrap forecast-container"}>
+            <div className={"ms-5 mb-3"}>
+                <h4>
+                    5 Day Forecast
+                </h4>
+            </div>
+            <div className={"row flex-column flex-wrap align-items-center forecast-container"}>
                 {weatherItem5Day?.map((item, key) => {
                     return <div className={"col forecast-card"} key={key}>
-                        {/*todo create a weatherdescription mapping for the word to icon*/}
                         <Card imageLeft={true}
-                              icon={faCloudRain}
+                              imgCode={item.weatherCode ? item.weatherCode : "0"}
                               cardTitle={item.time ? item.time : ""}
                               cardBody={`${item.temperature?.avg}°C`}
                               cardSecondary={item.weatherDescription ? item.weatherDescription : ""}
