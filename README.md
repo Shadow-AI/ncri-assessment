@@ -25,3 +25,7 @@ This is a simple proof of concept for a weather app built in React.js employing 
   - Implementation method would be to employ localStorage in browser and save a list of objects with the location name/coordinates
   - When loading, would make an api call to get the weather information, such as weatherCode and the temperature to be displayed
   - Problem with implementation is rate limitations on the API
+- Unit Conversion
+  - Currently, the app only displays in metric units
+  - Implementation would be to add a button to toggle between metric and imperial units
+  - Will require an api call to get the weather information in the desired units, or alternatively convert values locally
