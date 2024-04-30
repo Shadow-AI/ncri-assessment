@@ -1,0 +1,40 @@
+/*side panel css*/
+.offcanvas {
+    color: var(--text-color);
+    background-color: #292929;
+}
+
+.offcanvas-header svg:hover{
+    cursor: pointer;
+    color: green;
+}
+
+#sidePanelToggler {
+    left: -1.5rem;
+    transition: left .25s ease-in-out;
+
+    &:hover {
+        left: -1rem;
+    }
+}
+
+.offcanvas.offcanvas-start {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+#searchLocation {
+    border: none;
+    background: none;
+    color: var(--background-color);
+    padding: 0;
+    top: .5rem;
+    right: 1rem;
+}
+/*side panel css ends*/
+
+/*main page css*/
+.lat-lng{
+    text-align: right;
+    font-size: .8rem;
+}
