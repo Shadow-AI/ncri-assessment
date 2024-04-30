@@ -2,20 +2,22 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 import '../css/App.css';
-import weatherCode from "../assets/weatherCodes.json"
 
 import {useEffect, useState} from "react";
 import ForecastPanel from "./ForecastPanel.jsx";
 import CentralPanel from "./CentralPanel.jsx";
 
+import weatherCodeMapping from "../assets/weatherCodes.json";
+
 // design inspiration
 // https://dribbble.com/shots/21260336-Weather-App-UI-UX-Design
 
+/**
+ * App component that serves as the main entry point for the application.
+ */
 function App() {
     // for current location of user, default 0,0
     const [currentLocation, setCurrentLocation] = useState({latitude: 0, longitude: 0});
-    // use metric values by default
-    const [isMetric, setIsMetric] = useState(true);
 
     const [location, setLocation] = useState("");
     const [state, setState] = useState("");
@@ -28,7 +30,7 @@ function App() {
     const base_url = 'https://api.tomorrow.io/v4/weather/forecast?apikey=86PXB6dOg6euSSy3mHhHz0lfPy5ank4w';
 
     const call_api = (user_location = `${currentLocation.latitude},${currentLocation.longitude}`,
-                      units = isMetric ? "metric" : "imperial",
+                      units = "metric",
                       timesteps = "1d") => {
 
         let locale = "";
@@ -38,6 +40,11 @@ function App() {
         let weatherItemToday = {};
         let weatherItems5Day = {};
 
+        /**
+         * checkIfNumber function that checks if a string is a number.
+         * @param {string} str - The string to check.
+         * @return {boolean} - True if the string is a number, false otherwise.
+         */
         const checkIfNumber = (str) => {
             return !isNaN(parseFloat(str));
         }
@@ -62,16 +69,33 @@ function App() {
                 latlng = data.location.lat + "," + data.location.lon;
 
                 // get weather items
+                /**
+                 * minifyJSON function that takes a weather item and returns a minified version of it with only relevant info.
+                 * @param {object} item - A weather item object.
+                 * @returns {object} - A minified weather item object.
+                 */
                 const minifyJSON = (item) => {
+                    console.log(item.values);
                     const weatherCodes = [item.values.weatherCodeMin, item.values.weatherCodeMax];
-                    let weatherDescription = "";
+                    const weatherCode = weatherCodes[0];
+                    let weatherDescription;
                     if (weatherCodes[0] === weatherCodes[1]) {
-                        weatherDescription = weatherCode[weatherCodes[0]];
+                        weatherDescription = weatherCodeMapping[weatherCodes[0]];
                     } else {
-                        weatherDescription = `${weatherCode[weatherCodes[0]]} - ${weatherCode[weatherCodes[1]]}`;
+                        weatherDescription = `${weatherCodeMapping[weatherCodes[0]]} - ${weatherCodeMapping[weatherCodes[1]]}`;
                     }
+                    const date = new Date(item.time);
+
+                    let sunriseTime = new Date(item.values.sunriseTime);
+                    let sunsetTime = new Date(item.values.sunsetTime);
+                    sunriseTime = sunriseTime.toLocaleTimeString();
+                    sunsetTime = sunsetTime.toLocaleTimeString();
                     return {
-                        "time": item.time,
+                        "time": date.toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric"
+                        }),
                         "temperature": {
                             "min": item.values.temperatureMin,
                             "max": item.values.temperatureMax,
@@ -93,7 +117,10 @@ function App() {
                             "max": item.values.humidityMax,
                             "avg": item.values.humidityAvg
                         },
-                        "weatherDescription": weatherDescription
+                        "weatherDescription": weatherDescription,
+                        "weatherCode": weatherCode,
+                        "sunriseTime": sunriseTime,
+                        "sunsetTime": sunsetTime
                     }
                 }
                 weatherItemToday = data.timelines.daily.slice(0, 1).map(minifyJSON);
@@ -110,6 +137,10 @@ function App() {
             .catch(error => console.log(error));
     }
 
+    /*
+     * submitLocation function that submits the location entered by the user and updates the weather information.
+     * @param {event} e - The submit event.
+     */
     const submitLocation = (e) => {
         e.preventDefault();
         const response = call_api(e.target[0].value);
@@ -121,8 +152,27 @@ function App() {
             setLatlng(data.latlng);
             setWeatherItemToday(data.weatherItemToday[0]);
             setWeatherItems5Day(data.weatherItems5Day);
+
+            //clear the input
+            e.target[0].value = "";
         });
     }
+
+    /*
+     * updateCurrentLocation function that updates the weather information for the current location of the user.
+     */
+    const updateCurrentLocation = () => {
+        // call api on page load for current location
+        call_api().then(data => {
+            setLocation("Current Location");
+            setState("");
+            setCountry("");
+            setLatlng(data.latlng);
+            setWeatherItemToday(data.weatherItemToday[0]);
+            setWeatherItems5Day(data.weatherItems5Day);
+        });
+    }
+
     // todo remove temporary tester
     useEffect(() => {
         setWeatherItemToday({
@@ -148,7 +198,8 @@ function App() {
                 "max": "10",
                 "avg": "5"
             },
-            "weatherDescription": "cloudy"
+            "weatherDescription": "cloudy",
+            "weatherCode": 1000
         });
         setWeatherItems5Day([
             {
@@ -288,11 +339,30 @@ function App() {
         if ('geolocation' in navigator) {
             navigator.geolocation.getCurrentPosition((position) => {
                 setCurrentLocation({latitude: position.coords.latitude, longitude: position.coords.longitude});
+
+                // call_api().then(data => {
+                //     setLocation("Current Location");
+                //     setState("");
+                //     setCountry("");
+                //     setLatlng(data.latlng);
+                //     setWeatherItemToday(data.weatherItemToday[0]);
+                //     setWeatherItems5Day(data.weatherItems5Day);
+                // });
+
             }, (error) => {
                 console.log('Error: ', error.message);
             });
         } else {
             console.log('Geolocation is not available');
+            // load with pittsburgh as default
+            // call_api("Pittsburgh").then(data=>{
+            //     setLocation(data.location);
+            //     setState(data.state);
+            //     setCountry(data.country);
+            //     setLatlng(data.latlng);
+            //     setWeatherItemToday(data.weatherItemToday[0]);
+            //     setWeatherItems5Day(data.weatherItems5Day);
+            // });
         }
     }, []);
 
@@ -301,17 +371,15 @@ function App() {
             <div className="container-fluid">
                 <div className={"row position-relative"}>
                     <div className={"col-12 col-md-7"}>
-                        <CentralPanel updateLocation={submitLocation} location={location}
-                                      state={state} country={country} latlng={latlng}
+                        <CentralPanel updateLocation={submitLocation} updateCurrentLocation={updateCurrentLocation}
+                                      location={location} state={state} country={country} latlng={latlng}
                                       weatherItemToday={weatherItemToday}/>
                     </div>
                     <div className={"col"}>
-                        5 Day Forecast
                         <ForecastPanel weatherItem5Day={weatherItems5Day}/>
                     </div>
                 </div>
             </div>
-
         </>
     );
 }
