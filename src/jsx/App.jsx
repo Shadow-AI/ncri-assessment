@@ -197,6 +197,15 @@ function App() {
 
             }, (error) => {
                 console.log('Error: ', error.message);
+                // load with pittsburgh as default
+                call_api("Pittsburgh").then(data => {
+                    setLocation(data.location);
+                    setState(data.state);
+                    setCountry(data.country);
+                    setLatlng(data.latlng);
+                    setWeatherItemToday(data.weatherItemToday[0]);
+                    setWeatherItems5Day(data.weatherItems5Day);
+                });
             });
         } else {
             console.log('Geolocation is not available');

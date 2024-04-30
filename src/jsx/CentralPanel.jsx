@@ -61,18 +61,18 @@ const CentralPanel = ({
     const dummyLocations = [
         {
             name: "New York",
-            temperature: 25,
-            weatherCode: 1000
+            temperature: "25",
+            weatherCode: "1000"
         },
         {
             name: "Los Angeles",
-            temperature: 30,
-            weatherCode: 1001
+            temperature: "30",
+            weatherCode: "1001"
         },
         {
             name: "Chicago",
-            temperature: 15,
-            weatherCode: 4001
+            temperature: "15",
+            weatherCode: "4001"
         }
     ]
 
