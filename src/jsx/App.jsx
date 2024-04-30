@@ -29,6 +29,13 @@ function App() {
     // api calls
     const base_url = 'https://api.tomorrow.io/v4/weather/forecast?apikey=86PXB6dOg6euSSy3mHhHz0lfPy5ank4w';
 
+    /** It returns a promise that resolves to an object containing the weather data.
+     *
+     * @param {string} user_location - The location to fetch weather data for. Default is the current location's latitude and longitude.
+     * @param {string} units - The units to use for the weather data. Default is "metric".
+     * @param {string} timesteps - The timesteps to use for the weather data. Default is "1d".
+     * @return {Promise} - A promise that resolves to an object containing the weather data.
+     */
     const call_api = (user_location = `${currentLocation.latitude},${currentLocation.longitude}`,
                       units = "metric",
                       timesteps = "1d") => {
@@ -173,181 +180,20 @@ function App() {
         });
     }
 
-    // todo remove temporary tester
-    useEffect(() => {
-        setWeatherItemToday({
-            "time": "item.time",
-            "temperature": {
-                "min": "0",
-                "max": "10",
-                "avg": "5"
-            },
-            "feelsLike": {
-                "min": "0",
-                "max": "10",
-                "avg": "5"
-            },
-            "windSpeed": {
-                "min": "0",
-                "max": "10",
-                "avg": "5"
-            },
-            "windDirection": "234.5",
-            "humidity": {
-                "min": "0",
-                "max": "10",
-                "avg": "5"
-            },
-            "weatherDescription": "cloudy",
-            "weatherCode": 1000
-        });
-        setWeatherItems5Day([
-            {
-                "time": "item.time",
-                "temperature": {
-                    "min": "0",
-                    "max": "10",
-                    "avg": "5"
-                },
-                "feelsLike": {
-                    "min": "0",
-                    "max": "10",
-                    "avg": "5"
-                },
-                "windSpeed": {
-                    "min": "0",
-                    "max": "10",
-                    "avg": "5"
-                },
-                "windDirection": "234.5",
-                "humidity": {
-                    "min": "0",
-                    "max": "10",
-                    "avg": "5"
-                },
-                "weatherDescription": "cloudy"
-            },
-            {
-                "time": "item.time",
-                "temperature": {
-                    "min": "0",
-                    "max": "10",
-                    "avg": "5"
-                },
-                "feelsLike": {
-                    "min": "0",
-                    "max": "10",
-                    "avg": "5"
-                },
-                "windSpeed": {
-                    "min": "0",
-                    "max": "10",
-                    "avg": "5"
-                },
-                "windDirection": "234.5",
-                "humidity": {
-                    "min": "0",
-                    "max": "10",
-                    "avg": "5"
-                },
-                "weatherDescription": "cloudy"
-            },
-            {
-                "time": "item.time",
-                "temperature": {
-                    "min": "0",
-                    "max": "10",
-                    "avg": "5"
-                },
-                "feelsLike": {
-                    "min": "0",
-                    "max": "10",
-                    "avg": "5"
-                },
-                "windSpeed": {
-                    "min": "0",
-                    "max": "10",
-                    "avg": "5"
-                },
-                "windDirection": "234.5",
-                "humidity": {
-                    "min": "0",
-                    "max": "10",
-                    "avg": "5"
-                },
-                "weatherDescription": "cloudy"
-            },
-            {
-                "time": "item.time",
-                "temperature": {
-                    "min": "0",
-                    "max": "10",
-                    "avg": "5"
-                },
-                "feelsLike": {
-                    "min": "0",
-                    "max": "10",
-                    "avg": "5"
-                },
-                "windSpeed": {
-                    "min": "0",
-                    "max": "10",
-                    "avg": "5"
-                },
-                "windDirection": "234.5",
-                "humidity": {
-                    "min": "0",
-                    "max": "10",
-                    "avg": "5"
-                },
-                "weatherDescription": "cloudy"
-            },
-            {
-                "time": "item.time",
-                "temperature": {
-                    "min": "0",
-                    "max": "10",
-                    "avg": "5"
-                },
-                "feelsLike": {
-                    "min": "0",
-                    "max": "10",
-                    "avg": "5"
-                },
-                "windSpeed": {
-                    "min": "0",
-                    "max": "10",
-                    "avg": "5"
-                },
-                "windDirection": "234.5",
-                "humidity": {
-                    "min": "0",
-                    "max": "10",
-                    "avg": "5"
-                },
-                "weatherDescription": "cloudy"
-            }
-        ]);
-        setLocation("Pittsburgh");
-        setState("PA");
-        setCountry("USA");
-        setLatlng("40.4406248,-79.9958864");
-    }, []);
-
     // receive location from user device
     useEffect(() => {
         if ('geolocation' in navigator) {
             navigator.geolocation.getCurrentPosition((position) => {
                 setCurrentLocation({latitude: position.coords.latitude, longitude: position.coords.longitude});
 
-                // call_api().then(data => {
-                //     setLocation("Current Location");
-                //     setState("");
-                //     setCountry("");
-                //     setLatlng(data.latlng);
-                //     setWeatherItemToday(data.weatherItemToday[0]);
-                //     setWeatherItems5Day(data.weatherItems5Day);
-                // });
+                call_api().then(data => {
+                    setLocation("Current Location");
+                    setState("");
+                    setCountry("");
+                    setLatlng(data.latlng);
+                    setWeatherItemToday(data.weatherItemToday[0]);
+                    setWeatherItems5Day(data.weatherItems5Day);
+                });
 
             }, (error) => {
                 console.log('Error: ', error.message);
@@ -355,14 +201,14 @@ function App() {
         } else {
             console.log('Geolocation is not available');
             // load with pittsburgh as default
-            // call_api("Pittsburgh").then(data=>{
-            //     setLocation(data.location);
-            //     setState(data.state);
-            //     setCountry(data.country);
-            //     setLatlng(data.latlng);
-            //     setWeatherItemToday(data.weatherItemToday[0]);
-            //     setWeatherItems5Day(data.weatherItems5Day);
-            // });
+            call_api("Pittsburgh").then(data => {
+                setLocation(data.location);
+                setState(data.state);
+                setCountry(data.country);
+                setLatlng(data.latlng);
+                setWeatherItemToday(data.weatherItemToday[0]);
+                setWeatherItems5Day(data.weatherItems5Day);
+            });
         }
     }, []);
 

@@ -1,5 +1,5 @@
 import {
-    faBars,
+    faBars, faBookmark,
     faDroplet,
     faLocationArrow,
     faSearch,
@@ -38,6 +38,11 @@ const CentralPanel = ({
                           weatherItemToday
                       }) => {
 
+    /**
+     * Returns the appropriate temperature icon based on the temperature.
+     * @param temp the temperature in Celsius.
+     * @returns {object} - The appropriate temperature fontawesome icon.
+     */
     const temperatureIcon = (temp) => {
         if (temp >= 35) {
             return faTemperature4;
@@ -51,6 +56,25 @@ const CentralPanel = ({
             return faTemperature0;
         }
     }
+
+    // Dummy locations for the location panel for proof of concept
+    const dummyLocations = [
+        {
+            name: "New York",
+            temperature: 25,
+            weatherCode: 1000
+        },
+        {
+            name: "Los Angeles",
+            temperature: 30,
+            weatherCode: 1001
+        },
+        {
+            name: "Chicago",
+            temperature: 15,
+            weatherCode: 4001
+        }
+    ]
 
     return (<>
         <div className={"offcanvas offcanvas-start"} id={"locationPanel"}>
@@ -77,17 +101,15 @@ const CentralPanel = ({
                 </div>
                 <div className={"container locations my-3"}>
                     <div className={"d-flex flex-column align-items-center"}>
-                        <Card className={"my-3"} imageLeft={true}/>
-                        <Card className={"my-3"} imageLeft={true}/>
-                        <Card className={"my-3"} imageLeft={true}/>
-                        <Card className={"my-3"} imageLeft={true}/>
-                        <Card className={"my-3"} imageLeft={true}/>
-                        <Card className={"my-3"} imageLeft={true}/>
-                        <Card className={"my-3"} imageLeft={true}/>
-                        <Card className={"my-3"} imageLeft={true}/>
-                        <Card className={"my-3"} imageLeft={true}/>
-                        <Card className={"my-3"} imageLeft={true}/>
-                        <Card className={"my-3"} imageLeft={true}/>
+                        {dummyLocations.map((location, key) => {
+                            return <Card key={key}
+                                         className={"my-3 w-100 p-2"}
+                                         imageLeft={true}
+                                         imgCode={location.weatherCode}
+                                         cardTitle={location.name}
+                                         cardBody={`${location.temperature}°C`}
+                            />
+                        })}
                     </div>
                 </div>
             </div>
@@ -100,8 +122,12 @@ const CentralPanel = ({
                             data-bs-target={"#locationPanel"} id={"sidePanelToggler"}>
                         <FontAwesomeIcon icon={faBars}/>
                     </button>
-                    <div className={"city-name"}>
+                    <div className={"city-name position-relative"}>
                         <h3 className={"text-center"}>{location}</h3>
+                        {/*exists only for proof of concept at the moment*/}
+                        <span className={"position-absolute end-0"}>
+                            <FontAwesomeIcon icon={faBookmark} size={"lg"}/>
+                        </span>
                     </div>
                     <div className={"state-name"}>
                         {state && country ? <h4 className={"text-center"}>{state}, {country}</h4> : ""}
