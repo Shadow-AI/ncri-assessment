@@ -29,3 +29,6 @@ This is a simple proof of concept for a weather app built in React.js employing 
   - Currently, the app only displays in metric units
   - Implementation would be to add a button to toggle between metric and imperial units
   - Will require an api call to get the weather information in the desired units, or alternatively convert values locally
+- Detailed Weather information for 5day forecast
+  - Currently, the 5 day forecast displays just temperature, conditions, and icon
+  - Implementation would be to add more detailed information on hover/click 
