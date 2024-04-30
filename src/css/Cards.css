@@ -1,0 +1,75 @@
+.card{
+    background: linear-gradient(225deg, var(--background-color), var(--accent-background));
+    color: var(--accent-text);
+    transition: background 1s ease-in-out;
+    &:hover{
+        background: linear-gradient(225deg, var(--accent-background), var(--background-color));
+    }
+}
+
+.card.weather-feature {
+    width: 16.5rem;
+    height: 5.5rem;
+    border-radius: 1rem;
+}
+
+@media only screen and (max-width: 991px) {
+    .card.weather-feature {
+        width: 12rem;
+        height: 6rem;
+    }
+}
+@media only screen and (max-width: 575px){
+    .card.weather-feature {
+        width: 10rem;
+    }
+}
+@media only screen and (max-width: 374px){
+    .card.weather-feature {
+        width: 9rem;
+    }
+}
+
+.card > .container > h6 {
+    font-size: .85rem;
+}
+
+.card .weather-attributes :nth-child(1) {
+    font-size: 1.3rem;
+}
+
+.card .weather-attributes :nth-child(2) {
+    font-size: .8rem;
+}
+
+
+.forecast-card {
+    margin: -1rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .card {
+        flex-grow: 1;
+        transform: scale(.6);
+        transition: transform .25s ease-in-out;
+        border-radius: 1rem;
+
+        &:hover {
+            transform: scale(1);
+            z-index: 2;
+        }
+        div.temperature{
+            font-size: 1.8rem;
+        }
+        div.conditions{
+            font-size: .8rem;
+        }
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .forecast-card {
+        margin: 0 -2rem;
+    }
+}
